@@ -1,0 +1,80 @@
+{
+  "examples": [
+    {
+      "id": "ex-001",
+      "title": "Table Creation — sabtopleft_report_up",
+      "type": "sql",
+      "content": "CREATE TABLE [dbo].[sabtopleft_report_up]( NULL, [type] [int] NOT NULL, [comp] [int] NOT NULL, [ycode] [int] NOT NULL, [udate] [smalldatetime] NULL, [sabuser] [bigint] NULL, [mode] [bigint] NULL, [division] [int] NOT NULL, [pid] [bigint] NOT NULL, [sabid] [bigint] NOT NULL, NULL, [repname] [int] NULL, [allcomp] [int] NULL, NULL, CONSTRAINT [PK_sabtopleft_report_up] PRIMARY KEY CLUSTERED ([sabid] ASC));"
+    },
+    {
+      "id": "ex-002",
+      "title": "Table Creation — sabrep_topleft",
+      "type": "sql",
+      "content": "CREATE TABLE [dbo].[sabrep_topleft]( [rtype] int NULL, [repcode] nvarchar(20) NULL, [section] nvarchar(100) NULL, [colname] nvarchar(max) NULL, [caption] nvarchar(max) NULL, [ttop] int NULL, [tleft] int NULL, [symbol] nvarchar(10) NULL, [width] int NULL, [bold] int NULL, [fontsize] int NULL, [total] nvarchar(10) NULL, [pid] int NULL, [sabid] bigint NULL, [sabuser] bigint NULL, [hleft] int NULL, [height] int NULL, [sno] int NULL, [rowid] bigint NULL, [sabrowid] bigint NOT NULL, [type] int NULL, [comp] int NULL, [udate] smalldatetime NULL, [ycode] int NULL, [division] int NULL, [formating] nvarchar(100) NULL, [align] nvarchar(20) NULL, [subreptable] nvarchar(10) NULL, [id] int IDENTITY(1,1) NOT NULL, [ttag] nvarchar(40) NULL, [tabletag] nvarchar(40) NULL, [colid] int NULL, [visible] int NULL, [groupname] nvarchar(40) NULL, [lcaption] nvarchar(100) NULL, [fontname] nvarchar(20) NULL, [footerformula] nvarchar(40) NULL, [cellformula] nvarchar(40) NULL, PRIMARY KEY CLUSTERED ([sabrowid] ASC));"
+    },
+    {
+      "id": "ex-003",
+      "title": "Table Creation — sabrep_topleft_Box",
+      "type": "sql",
+      "content": "CREATE TABLE  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL,  NULL, [line_height] [int] NULL, PRIMARY KEY CLUSTERED ([sabrowid] ASC));"
+    },
+    {
+      "id": "ex-004",
+      "title": "View Example — companyheader",
+      "type": "sql",
+      "content": "CREATE VIEW sabrep_companyheader_chlf AS SELECT 'compname' colname, 'Transport Pass' bname, a.pid comp FROM sabcompany a UNION ALL SELECT 'compadr', 'Collector Palghar (Supply Dept)' bname, a.pid FROM sabcompany a UNION ALL SELECT 'line1','line',a.pid FROM sabcompany a UNION ALL SELECT 'heading','!heading',a.pid FROM sabcompany a;"
+    },
+    {
+      "id": "ex-005",
+      "title": "View Example — pageheader",
+      "type": "sql",
+      "content": "CREATE VIEW sabrep_pageheader_chlf AS SELECT 'Entno' colname,a.sabid,a.entno bname FROM tablename a UNION ALL SELECT 'Entdt',a.sabid,CONVERT(nvarchar,a.entdt,110) bname FROM tablename a UNION ALL SELECT 'LINE1',a.sabid,'line' bname FROM tablename a;"
+    },
+    {
+      "id": "ex-006",
+      "title": "View Example — details",
+      "type": "sql",
+      "content": "CREATE VIEW sabrep_details_chlf AS SELECT a.sabid, a.sno, asab9_a.person AS party, asab9_a.pdukanno, a.permit FROM bsab_trkchl_mid a LEFT JOIN asab9 AS asab9_a ON a.party = asab9_a.pid;"
+    },
+    {
+      "id": "ex-007",
+      "title": "View Execution Flow",
+      "type": "explanation",
+      "content": "1) Engine loads sabtopleft_report_up using sabid. 2) Loads section metadata from sabrep_topleft + sabrep_topleft_Box. 3) Finds the correct view (sabrep_details_<regcode>). 4) Executes SELECT * FROM view WHERE sabid = @sabid. 5) Each returned row prints as one detail row."
+    },
+    {
+      "id": "ex-008",
+      "title": "Field Binding Example",
+      "type": "mapping",
+      "content": "Example design rows: | section | colname | caption |. If design has colname 'party', then view MUST return column 'party'. Otherwise printed value will be blank."
+    },
+    {
+      "id": "ex-009",
+      "title": "Special Keyword Examples",
+      "type": "keywords",
+      "content": [
+        "line → draw a horizontal line",
+        "vline → draw a vertical line",
+        "!heading → print a formatted section heading"
+      ]
+    },
+    {
+      "id": "ex-010",
+      "title": "Dynamic View Naming Example",
+      "type": "naming",
+      "content": "If repcode = chlf, companyheader view must be named: sabrep_companyheader_chlf. If repcode = gtnx, pageheader view must be named: sabrep_pageheader_gtnx."
+    },
+    {
+      "id": "ex-011",
+      "title": "Report Printing Sequence Example",
+      "type": "flow",
+      "content": [
+        "Step 1: Load report master (sabtopleft_report_up).",
+        "Step 2: Load all design fields (sabrep_topleft).",
+        "Step 3: Load section containers (sabrep_topleft_Box).",
+        "Step 4: Execute all relevant views per section.",
+        "Step 5: Render output into printed layout."
+      ]
+    }
+  ]
+}

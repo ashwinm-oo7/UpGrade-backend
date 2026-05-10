@@ -1,0 +1,24 @@
+{
+  "title": "Report Designing — ERP",
+  "source": "Report Designing Steps.docx",
+  "summary": "Design-time metadata, tables, views, and rendering flow for a fully dynamic ERP report engine. Explains how reports are created using structured tables (sabtopleft_report_up, sabrep_topleft, sabrep_topleft_Box), dynamic view naming, mandatory fields, positioning, layout rules, and runtime execution flow inside the ERP system.",
+  "purpose": "Build dynamic reports from database metadata without hard-coded layouts. Report design is stored in tables; the engine reads definitions at runtime and binds them to data using predefined SQL views.",
+  "document_structure": [
+    "Overview",
+    "Report master table",
+    "Field layout table",
+    "Section container table",
+    "Section definitions",
+    "View requirements",
+    "Runtime execution logic",
+    "Special keywords",
+    "Connectivity rules"
+  ],
+  "notes": [
+    "Report definitions are completely dynamic.",
+    "Rendering engine binds design → data using sabid and colname.",
+    "Views must follow strict naming pattern based on regcode.",
+    "All layout positions are stored in millimeters.",
+    "Lines and headings use reserved keywords (line, vline, !heading)."
+  ]
+}

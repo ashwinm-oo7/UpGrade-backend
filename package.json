@@ -1,0 +1,45 @@
+{
+  "name": "ashwinchatgptbackend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "start": "nodemon app.js"
+  },
+  "dependencies": {
+    "@express-rate-limit/tsconfig": "^1.0.2",
+    "@google/genai": "^0.10.0",
+    "@google/generative-ai": "^0.24.1",
+    "axios": "^1.14.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.0",
+    "express-rate-limit": "^8.3.1",
+    "fontkit": "^2.0.4",
+    "fuse.js": "^7.1.0",
+    "googleapis": "^171.4.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.2",
+    "multer": "^2.1.1",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^6.10.1",
+    "openai": "^4.30.0",
+    "otp-generator": "^4.0.1",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.18.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.34.5",
+    "socket.io": "^4.8.3",
+    "ua-parser-js": "^2.0.9",
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "explanations": [
+    {
+      "id": "exp-001",
+      "title": "Design Purpose",
+      "content": "The ERP reporting system builds fully dynamic reports from metadata stored in tables and views. No layouts are hard-coded. The report engine reads design definitions and binds them to dynamic SQL views at runtime."
+    },
+    {
+      "id": "exp-002",
+      "title": "How Reports Are Built",
+      "content": "Reports are constructed using three central tables: sabtopleft_report_up (master), sabrep_topleft (fields), and sabrep_topleft_Box (sections). The engine uses sabid to connect all tables and views. The design determines layout, while SQL views supply real data. Each section must have a corresponding SQL view using the naming rule sabrep_<section>_<regcode>."
+    },
+    {
+      "id": "exp-003",
+      "title": "Layout Positioning",
+      "content": "Positions are defined in millimeters. ttop determines Y-axis placement, tleft defines X-axis placement, width defines total space for caption + value, and height defines vertical size. These values map to printed coordinates."
+    },
+    {
+      "id": "exp-004",
+      "title": "colname Must Match View",
+      "content": "For a field to show data, sabrep_topleft.colname must exactly match the column defined in the corresponding view sabrep_<section>_<regcode>. If a mismatch occurs, the field prints blank."
+    },
+    {
+      "id": "exp-005",
+      "title": "View Execution Flow",
+      "content": "The report engine dynamically executes the view matching the section and regcode. Example: for section 'details' and regcode 'chlf', the engine executes sabrep_details_chlf. During printing, it performs SELECT * FROM sabrep_details_chlf WHERE sabid = @sabid. The sabid is passed from sabtopleft_report_up. Each row returned becomes one printed line."
+    },
+    {
+      "id": "exp-006",
+      "title": "Runtime Printing Logic",
+      "content": "During printing: (1) sabtopleft_report_up is loaded using sabid. (2) Section metadata is loaded from sabrep_topleft and sabrep_topleft_Box. (3) The engine resolves the required views for each section. (4) Views are executed with sabid where applicable. (5) Data is merged with field definitions to output the printed report."
+    },
+    {
+      "id": "exp-007",
+      "title": "Details Section Logic",
+      "content": "The details section represents repeatable line-item rows. The view sabrep_details_<regcode> must provide all repeated data such as sno, party, permit. Each returned row prints one row in the report. If the view returns 0 rows, an empty section is printed. Column names must match exactly in design."
+    },
+    {
+      "id": "exp-008",
+      "title": "Header & Footer Behavior",
+      "content": "companyheader prints at the top of the report. pageheader prints at the top of every page. details prints once per transaction row. reportfooter prints once at the end of the report. pagefooter prints on every page bottom. Containers define positioning and borders for each of these sections."
+    },
+    {
+      "id": "exp-009",
+      "title": "Special Keyword Behavior",
+      "content": "Special reserved keywords inside bname or colname control rendering: (1) !heading prints a formatted heading. (2) line draws a horizontal line. (3) vline draws a vertical line. These act like rendering instructions rather than text."
+    },
+    {
+      "id": "exp-010",
+      "title": "View Mandatory Fields Explanation",
+      "content": "companyheader views require colname, bname, comp to bind company-level data. pageheader views require colname, bname, sabid to bind transaction-specific data. details views require sabid and all columns used in layout. footer views require tag, subreptable, tabletag depending on the section. Missing mandatory columns leads to rendering failure."
+    },
+    {
+      "id": "exp-011",
+      "title": "Design Binding Rule",
+      "content": "Every field in sabrep_topleft must connect to data from views using colname. The caption is optional, but colname is mandatory. The system binds each field by matching sabrep_topleft.colname with view.colname exactly."
+    },
+    {
+      "id": "exp-012",
+      "title": "Section-View Connectivity",
+      "content": "Each section must define a 'section' name in sabrep_topleft_Box, and a corresponding view must exist following sabrep_<section>_<regcode>. This ensures the design and runtime data are aligned. Missing view → section cannot be printed."
+    },
+    {
+      "id": "exp-013",
+      "title": "Row Alignment & Formatting",
+      "content": "The formating field controls number format such as ###,##0.00. The align field controls text alignment left/center/right. fontname and fontsize control typography. bold determines weight. All these combine to produce final printed text."
+    },
+    {
+      "id": "exp-014",
+      "title": "Group & Totals Logic",
+      "content": "groupname groups rows under a heading. total identifies sum/count logic for columns. footerformula applies summary formulas at the footer section. cellformula applies calculations per cell before printing."
+    },
+    {
+      "id": "exp-015",
+      "title": "Subtable Logic",
+      "content": "subreptable inside sabrep_topleft identifies secondary or nested tables to be rendered inside a section. tabletag links them. These are used for advanced multi-grid designs."
+    }
+  ]
+}

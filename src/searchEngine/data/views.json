@@ -1,0 +1,80 @@
+{
+  "views": [
+    {
+      "view_name_pattern": "sabrep_<section>_<regcode>",
+      "description": "Universal naming rule for all report views. The <regcode> is dynamic and must match the report's repcode.",
+      "rules": [
+        "Every section in sabrep_topleft_Box MUST have a corresponding SQL view.",
+        "The view name must follow the exact pattern sabrep_<section>_<regcode>.",
+        "colname in sabrep_topleft must match view.colname exactly.",
+        "sabid is mandatory for any section that prints record-specific data."
+      ]
+    },
+    {
+      "section": "companyheader",
+      "view_name": "sabrep_companyheader_<regcode>",
+      "mandatory_columns": ["colname", "bname", "comp"],
+      "description": "Provides company name, address, logo metadata, and lines/headings.",
+      "sql_example": "CREATE VIEW sabrep_companyheader_chlf AS\nSELECT 'compname' colname, 'Transport Pass' bname, a.pid comp FROM sabcompany a\nUNION ALL\nSELECT 'compadr', 'Collector Palghar (Supply Dept)' bname, a.pid FROM sabcompany a\nUNION ALL\nSELECT 'line1','line',a.pid FROM sabcompany a\nUNION ALL\nSELECT 'heading','!heading',a.pid FROM sabcompany a;",
+      "special_keywords": [
+        { "keyword": "!heading", "meaning": "Prints heading text." },
+        { "keyword": "line", "meaning": "Draw a horizontal line." },
+        { "keyword": "vline", "meaning": "Draw a vertical line." }
+      ],
+      "notes": [
+        "Used for company-level header info.",
+        "colname must match design fields.",
+        "bname defines displayed text."
+      ]
+    },
+    {
+      "section": "pageheader",
+      "view_name": "sabrep_pageheader_<regcode>",
+      "mandatory_columns": ["colname", "bname", "sabid"],
+      "description": "Contains page-level dynamic values (EntNo, EntDt, customer details).",
+      "sql_example": "CREATE VIEW sabrep_pageheader_chlf AS\nSELECT 'Entno' colname, a.sabid, a.entno bname FROM tablename a\nUNION ALL\nSELECT 'Entdt', a.sabid, CONVERT(nvarchar, a.entdt, 110) bname FROM tablename a\nUNION ALL\nSELECT 'LINE1', a.sabid, 'line' bname FROM tablename a;",
+      "notes": [
+        "Executes once per sabid record.",
+        "Returned single row or small set used for header printing."
+      ]
+    },
+    {
+      "section": "details",
+      "view_name": "sabrep_details_<regcode>",
+      "mandatory_columns": ["sabid"],
+      "description": "Provides all repeating transaction rows of the report.",
+      "sql_example": "CREATE VIEW sabrep_details_chlf AS\nSELECT a.sabid, a.sno, asab9_a.person AS party, asab9_a.pdukanno, a.permit\nFROM bsab_trkchl_mid a\nLEFT JOIN asab9 AS asab9_a ON a.party = asab9_a.pid;",
+      "rules": [
+        "This view executes as SELECT * FROM sabrep_details_<regcode> WHERE sabid = @sabid.",
+        "Every returned record becomes one printed detail row.",
+        "colname in design must match actual column names returned by view."
+      ],
+      "notes": [
+        "Repeating rows are printed based on this view.",
+        "If 10 rows returned → 10 printed lines.",
+        "If 0 rows returned → no detail lines."
+      ]
+    },
+    {
+      "section": "reportfooter",
+      "view_name": "sabrep_reportfooter_<regcode>",
+      "mandatory_columns": ["tag", "subreptable"],
+      "description": "Provides totals, summary, or footer data.",
+      "notes": [
+        "May call another sub-table via subreptable.",
+        "Printed once at report end."
+      ]
+    },
+    {
+      "section": "pagefooter",
+      "view_name": "sabrep_pagefooter_<regcode>",
+      "mandatory_columns": ["tag", "subreptable", "tabletag"],
+      "description": "Footer printed at bottom of every page.",
+      "notes": [
+        "Commonly shows Page X of Y.",
+        "May include print date/time.",
+        "tabletag identifies related footer table."
+      ]
+    }
+  ]
+}

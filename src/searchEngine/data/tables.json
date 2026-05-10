@@ -1,0 +1,123 @@
+{
+  "tables": [
+    {
+      "tablename": "sabtopleft_report_up",
+      "description": "Report master table. Stores high-level metadata for each report. Each report has one record per sabid.",
+      "columns": [
+        { "name": "repcode", "meaning": "Unique report code key." },
+        { "name": "type", "meaning": "Report type (invoice, purchase, receipt, etc.)." },
+        { "name": "comp", "meaning": "Company ID." },
+        { "name": "ycode", "meaning": "Financial year code." },
+        { "name": "udate", "meaning": "Last update date." },
+        { "name": "sabuser", "meaning": "User ID creating or modifying report." },
+        { "name": "mode", "meaning": "Creation/edit mode flag." },
+        { "name": "division", "meaning": "Branch or division code." },
+        { "name": "pid", "meaning": "Parent ID reference." },
+        { "name": "sabid", "meaning": "Primary unique ID linking all other tables." },
+        { "name": "mstid", "meaning": "Master table ID." },
+        { "name": "repname", "meaning": "Display name ID of the report." },
+        { "name": "allcomp", "meaning": "Applies to all companies if set." },
+        { "name": "menucode", "meaning": "Menu mapping code for UI/report linking." }
+      ],
+      "notes": [
+        "Linked with all design tables using sabid.",
+        "One row represents one entire report structure."
+      ]
+    },
+    {
+      "tablename": "sabrep_topleft",
+      "description": "Stores every report field's layout/design: caption, colname, font, alignment, formulas, width/height, position, grouping, etc. Used by the middle design table.",
+      "columns": [
+        { "name": "rtype", "meaning": "Report type reference." },
+        { "name": "repcode", "meaning": "Unique report code key." },
+        { "name": "section", "meaning": "Section name (must exist in sabrep_topleft_Box)." },
+        { "name": "colname", "meaning": "Column name from corresponding sabrep view. Must match exactly." },
+        { "name": "caption", "meaning": "Printed label before value." },
+        { "name": "ttop", "meaning": "Y-axis position in mm." },
+        { "name": "tleft", "meaning": "X-axis position in mm." },
+        { "name": "symbol", "meaning": "₹, $, or other symbol between caption and value." },
+        { "name": "width", "meaning": "Total width (caption + value area)." },
+        { "name": "bold", "meaning": "1 = bold, 0 = normal." },
+        { "name": "fontsize", "meaning": "Font size." },
+        { "name": "total", "meaning": "Sum/Count or other total logic." },
+        { "name": "pid", "meaning": "Parent ID reference." },
+        { "name": "sabid", "meaning": "Foreign key → sabtopleft_report_up." },
+        { "name": "sabuser", "meaning": "User who created/updated." },
+        { "name": "hleft", "meaning": "Caption X-axis offset." },
+        { "name": "height", "meaning": "Height of field." },
+        { "name": "sno", "meaning": "Serial/sequence number." },
+        { "name": "rowid", "meaning": "Running row ID for internal grouping." },
+        { "name": "sabrowid", "meaning": "Primary key for this row." },
+        { "name": "type", "meaning": "Type reference." },
+        { "name": "comp", "meaning": "Company ID." },
+        { "name": "udate", "meaning": "Update date." },
+        { "name": "ycode", "meaning": "Financial year code." },
+        { "name": "division", "meaning": "Division code." },
+        { "name": "formating", "meaning": "Number formatting string (###,##0.00 etc.)." },
+        { "name": "align", "meaning": "Alignment: left, center, right." },
+        { "name": "subreptable", "meaning": "Indicates sub-table or nested detail." },
+        { "name": "id", "meaning": "Identity key." },
+        { "name": "ttag", "meaning": "Tag name for grouping." },
+        { "name": "tabletag", "meaning": "Sub-table tag." },
+        { "name": "colid", "meaning": "Column identifier." },
+        { "name": "visible", "meaning": "Visibility flag." },
+        { "name": "groupname", "meaning": "Group header or grouping identifier." },
+        { "name": "lcaption", "meaning": "Caption alignment/position reference." },
+        { "name": "fontname", "meaning": "Font family." },
+        { "name": "footerformula", "meaning": "Formula applied in footer." },
+        { "name": "cellformula", "meaning": "Formula applied per cell." }
+      ],
+      "notes": [
+        "Each row represents one printed field.",
+        "colname MUST match view colname.",
+        "Positioning is in millimeters.",
+        "Handles formulas, grouping, sub-tables, alignments, formatting."
+      ]
+    },
+    {
+      "tablename": "sabrep_topleft_Box",
+      "description": "Defines each report section container (header, footer, detail, company header, etc.) Positions, dimensions, borders, captions, icons, page orientation.",
+      "columns": [
+        { "name": "repcode", "meaning": "Report code mapping." },
+        { "name": "section", "meaning": "Section name (report, pageheader, details, etc.)." },
+        { "name": "height", "meaning": "Height of container." },
+        { "name": "width", "meaning": "Width of container." },
+        { "name": "landscape", "meaning": "Indicates page orientation (Y/N)." },
+        { "name": "iconurl", "meaning": "Image path for section (e.g., company logo)." },
+        { "name": "iconurlh", "meaning": "Icon height." },
+        { "name": "iconurlw", "meaning": "Icon width." },
+        { "name": "line_left", "meaning": "Left border line flag." },
+        { "name": "line_bottom", "meaning": "Bottom border line flag." },
+        { "name": "pageno", "meaning": "Page number position (up/down)." },
+        { "name": "ttop", "meaning": "Top position." },
+        { "name": "tleft", "meaning": "Left position." },
+        { "name": "id", "meaning": "Identity key." },
+        { "name": "sabid", "meaning": "Foreign key → sabtopleft_report_up." },
+        { "name": "comp", "meaning": "Company ID." },
+        { "name": "ycode", "meaning": "Financial year code." },
+        { "name": "division", "meaning": "Division code." },
+        { "name": "type", "meaning": "Type reference." },
+        { "name": "sabuser", "meaning": "User who created or updated." },
+        { "name": "pid", "meaning": "Parent ID." },
+        { "name": "sno", "meaning": "Sequence number." },
+        { "name": "sabrowid", "meaning": "Primary key of section row." },
+        { "name": "rowid", "meaning": "Row identifier for ordering." },
+        { "name": "udate", "meaning": "Update date." },
+        { "name": "amttoword", "meaning": "Amount-to-words flag." },
+        { "name": "colcount", "meaning": "Column count." },
+        { "name": "accrossdown", "meaning": "Direction of printing (across/down)." },
+        { "name": "lcaption", "meaning": "Caption alignment setting." },
+        { "name": "caption", "meaning": "Section caption." },
+        { "name": "line_top", "meaning": "Top border line flag." },
+        { "name": "line_right", "meaning": "Right border line flag." },
+        { "name": "line_height", "meaning": "Line thickness/height." }
+      ],
+      "notes": [
+        "Defines every container box for layout.",
+        "Controls borders, dimensions, orientation, icons, pagination.",
+        "All sections use sabrowid as unique PK.",
+        "Linked to sabtopleft_report_up by sabid."
+      ]
+    }
+  ]
+}

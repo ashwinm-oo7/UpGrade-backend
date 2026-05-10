@@ -1,0 +1,134 @@
+{
+  "sections": [
+    {
+      "section": "report",
+      "description": "Main page container. Defines page size, width, height, left/right margins, and orientation. Every element exists inside this section.",
+      "view_name_pattern": null,
+      "mandatory_columns": [],
+      "attributes": [
+        { "name": "repcode", "meaning": "Unique report code." },
+        { "name": "section", "meaning": "Always 'report' for this container." },
+        { "name": "ttop", "meaning": "Page top margin start." },
+        { "name": "tleft", "meaning": "Page left margin start." },
+        { "name": "height", "meaning": "Page height." },
+        { "name": "width", "meaning": "Page width." },
+        { "name": "landscape", "meaning": "Page orientation (Y/N)." },
+        { "name": "pageno", "meaning": "Page number position (up/down)." }
+      ],
+      "notes": [
+        "This is the outermost container.",
+        "Every component must fit within these page boundaries."
+      ]
+    },
+    {
+      "section": "report_line",
+      "description": "Defines the vertical line that divides the page. Used for visual structure. Height defines full page height.",
+      "view_name_pattern": null,
+      "mandatory_columns": [],
+      "attributes": [
+        { "name": "ttop", "meaning": "Line top position." },
+        { "name": "tleft", "meaning": "Line left position." },
+        { "name": "height", "meaning": "Vertical line height." },
+        { "name": "width", "meaning": "Line width." }
+      ],
+      "notes": [
+        "Used for page structuring.",
+        "Typically used only for layout guidance."
+      ]
+    },
+    {
+      "section": "companyheader",
+      "description": "Top-most header section. Shows company name, address, and logo. Appears only on the first page unless repeated intentionally.",
+      "view_name_pattern": "sabrep_companyheader_<regcode>",
+      "mandatory_columns": ["colname", "bname", "comp"],
+      "special_keywords": [
+        { "keyword": "!heading", "meaning": "Prints a heading text with special formatting." },
+        { "keyword": "line", "meaning": "Draws a horizontal line." },
+        { "keyword": "vline", "meaning": "Draws a vertical line." }
+      ],
+      "attributes": [
+        { "name": "ttop", "meaning": "Container top margin." },
+        { "name": "tleft", "meaning": "Container left margin." },
+        { "name": "width", "meaning": "Container width." },
+        { "name": "height", "meaning": "Container height." },
+        { "name": "iconurl", "meaning": "Logo path." },
+        { "name": "iconurlh", "meaning": "Logo height." },
+        { "name": "iconurlw", "meaning": "Logo width." }
+      ],
+      "notes": [
+        "Used for branding and company identity.",
+        "View must provide company data dynamically using regcode.",
+        "All colnames in sabrep_topleft must match view columns."
+      ]
+    },
+    {
+      "section": "pageheader",
+      "description": "Contains report-level details such as debtor name, invoice number, invoice date, etc. Appears at the top of every page.",
+      "view_name_pattern": "sabrep_pageheader_<regcode>",
+      "mandatory_columns": ["colname", "bname", "sabid"],
+      "attributes": [
+        { "name": "caption", "meaning": "Printed label before value." },
+        { "name": "colname", "meaning": "Must match SQL view colname." },
+        { "name": "line_left", "meaning": "Left border line (Y/N)." },
+        { "name": "line_right", "meaning": "Right border line (Y/N)." },
+        { "name": "line_bottom", "meaning": "Bottom border line (Y/N)." },
+        { "name": "line_up", "meaning": "Top border line (Y/N)." },
+        { "name": "line_height", "meaning": "Border thickness." }
+      ],
+      "notes": [
+        "Repeated on every printed page.",
+        "Provides key transaction details.",
+        "Rendering depends on view returning sabid-linked row."
+      ]
+    },
+    {
+      "section": "details",
+      "description": "Repeating line items or transaction rows. This is the main dynamic part of any report.",
+      "view_name_pattern": "sabrep_details_<regcode>",
+      "mandatory_columns": ["sabid"],
+      "attributes": [
+        { "name": "colname", "meaning": "Design colname must match view colname." },
+        { "name": "caption", "meaning": "Printed label." },
+        { "name": "ttop", "meaning": "Row top position." },
+        { "name": "tleft", "meaning": "Column left position." },
+        { "name": "width", "meaning": "Field width." },
+        { "name": "height", "meaning": "Row height." }
+      ],
+      "notes": [
+        "This section executes once per data row returned by the view.",
+        "If 10 records → prints 10 rows.",
+        "If no matching data → prints an empty detail block."
+      ]
+    },
+    {
+      "section": "reportfooter",
+      "description": "Final footer at the end of report. Shows totals, summaries, signatures.",
+      "view_name_pattern": "sabrep_reportfooter_<regcode>",
+      "mandatory_columns": ["tag", "subreptable"],
+      "attributes": [
+        { "name": "footerformula", "meaning": "Total calculation formula." },
+        { "name": "caption", "meaning": "Printed label (e.g., Total Amount)." }
+      ],
+      "notes": [
+        "Rendered once at the end of all detail rows.",
+        "Used for final totals or text summaries.",
+        "subreptable may specify a secondary view for footer."
+      ]
+    },
+    {
+      "section": "pagefooter",
+      "description": "Appears at the bottom of every page. Contains page number, print datetime, company name, etc.",
+      "view_name_pattern": "sabrep_pagefooter_<regcode>",
+      "mandatory_columns": ["tag", "subreptable", "tabletag"],
+      "attributes": [
+        { "name": "pageno", "meaning": "Page number placement." },
+        { "name": "line_bottom", "meaning": "Bottom border line flag." }
+      ],
+      "notes": [
+        "Prints on every page.",
+        "Common use: Page X of Y, print date, disclaimers.",
+        "tabletag may specify dynamic content source."
+      ]
+    }
+  ]
+}

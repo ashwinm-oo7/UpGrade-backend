@@ -78,8 +78,8 @@ app.use(
   }),
 );
 const allowedOrigins = [
-  "https://UpGrade.vercel.app",
-  "https://UpGrade-azj8rv4cw-ashwinm-oo7s-projects.vercel.app/",
+  "https://upgradecareer.vercel.app",
+  "https://upgradecareer-git-main-ashwinm-oo7s-projects.vercel.app",
   "http://localhost:3000",
 ];
 
@@ -108,6 +108,9 @@ app.use(
 //   res.json({ csrfToken: req.csrfToken() });
 // });
 // Use the chat routes
+app.get("/", (req, res) => {
+  res.send("Backend Working");
+});
 app.use("/chats", chatRoutes);
 app.use("/api/auth", LoginRoutes);
 app.use("/search-engine", searchEngineRoutes);
@@ -144,6 +147,6 @@ const PORT = process.env.PORT || 6000;
 //   console.log(`Server running on port ${PORT}`);
 // });
 
-server.listen(PORT, () => {
+server.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });

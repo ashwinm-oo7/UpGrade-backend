@@ -202,19 +202,21 @@ const transporterWAITS = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
 });
-const accessToken = await oAuth2Client.getAccessToken();
+const createTransporter = async () => {
+  const accessToken = await oAuth2Client.getAccessToken();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    type: "OAuth2",
-    user: process.env.EMAIL_USER,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-    accessToken: accessToken?.token,
-  },
-});
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: process.env.EMAIL_USER,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: process.env.REFRESH_TOKEN,
+      accessToken: accessToken.token,
+    },
+  });
+};
 export const toggleStar = async (id) => {
   await gmail.users.messages.modify({
     userId: "me",
@@ -248,6 +250,8 @@ export const deleteForever = async (id) => {
 };
 // Generic function to send styled emails
 export const sendMail = async ({ to, subject, html }) => {
+  const transporter = await createTransporter();
+
   const mailOptions = {
     from: `"UpGrade" <${process.env.EMAIL_USER}>`,
     to,
